@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Image,
   View,
@@ -15,8 +16,11 @@ import { Option } from "@/components/option";
 
 import { styles } from "./styles";
 import { colors } from "@/styles/colors";
+import { categories } from "@/utils/categories";
 
 export default function Index() {
+  const [category, setCategory] = useState(categories[0].name);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -33,7 +37,10 @@ export default function Index() {
         </TouchableOpacity>
       </View>
 
-      <Categories></Categories>
+      <Categories
+        currentCategory={category}
+        onChange={setCategory}
+      ></Categories>
 
       <FlatList
         data={["1", "2", "3", "4", "5"]}
