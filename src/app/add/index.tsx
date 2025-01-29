@@ -6,27 +6,38 @@ import { styles } from "./styles";
 import { colors } from "@/styles/colors";
 import { router } from "expo-router";
 import { Categories } from "@/components/categories";
+import { categories } from "@/utils/categories";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
+import { linkStorage } from "@/storage/link-storage";
 
 export default function Add() {
-  const [category, setCategory] = useState("");
-  const [name, setName] = useState(""); // Inicialização corrigida
-  const [url, setUrl] = useState(""); // Inicialização corrigida
+  const [category, setCategory] = useState(categories[0].name);
+  const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
 
-  function handleAdd() {
-    if (!category.trim()) {
-      console.log("oie");
-      return Alert.alert("Categoria", "Selecione a categoria");
-    }
-    if (!name.trim()) {
-      return Alert.alert("Nome", "Digite o nome");
-    }
-    if (!url.trim()) {
-      return Alert.alert("URL", "Digite a URL");
-    }
+  async function handleAdd() {
+    try {
+      if (!category.trim()) {
+        return Alert.alert("Categoria", "Selecione a categoria");
+      }
+      if (!name.trim()) {
+        return Alert.alert("Nome", "Digite o nome");
+      }
+      if (!url.trim()) {
+        return Alert.alert("URL", "Digite a URL");
+      }
 
-    console.log("oie");
+      await linkStorage.save({
+        id: new Date().getTime().toString(),
+        name,
+        url,
+        category,
+      });
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível salvar o link");
+      console.log(error);
+    }
   }
 
   return (
